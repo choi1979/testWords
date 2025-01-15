@@ -11,7 +11,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 60vh;
+            height: 40vh;
         }
 
         .card {
@@ -21,10 +21,11 @@
             transform-style: preserve-3d;
             transition: transform 0.6s;
             cursor: pointer;
-            background-color: #fff;
-            border: 1px solid black;
+            background-color: #fefcea;
+            border: 1px solid #222222;
             border-radius: 30px;
             user-select: none;
+            font-size: 10px;
         }
 
         .card.flip {
@@ -77,53 +78,119 @@
             justify-content: center;
             flex-wrap: wrap;
             margin: 20px;
+            /* border: #222222 solid 1px; */
+            /* border-radius: 10px; */
+            padding: 4px 0  4px 0 ;
         }
 
         .button {
             display: inline-block;
             padding: 10px 20px;
-            color: white;
+            color: rgb(2, 2, 2);
             text-align: center;
             text-decoration: none;
             font-size: 16px;
             margin: 4px;
             border-radius: 4px;
             cursor: pointer;
-            width: calc(80% / 3 - 8px); /* 3개의 버튼으로 나누기 */
+            width: calc(100% / 3 ); /* 3개의 버튼으로 나누기 */
+            
         }
 
         .button0 {
-            background-color: #4CAF50; /* 첫 번째 버튼 색상 */
+            background-color: #fefcea; /* 첫 번째 버튼 색상 */
         }
 
         .button1 {
-            background-color: #f44336; /* 두 번째 버튼 색상 */
+            background-color: #f7b5b0; /* 두 번째 버튼 색상 */
         }
 
         .button2 {
-            background-color: #fde816; /* 세 번째 버튼 색상 */
+            background-color: #ccfbc7; /* 세 번째 버튼 색상 */
+        }
+
+        .resetbutton{
+            
+            background-color: #b7acfd; /* 두 번째 버튼 색상 */
+        }
+
+        .speak_button {
+            display: inline-block;
+            padding: 10px 20px;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+            margin: 4px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: calc(100% / 2); /* 2개의 버튼으로 나누기 */
+            
+        }
+
+        .speak1 {
+            width: 30%;
+            background-color: #77a7f5; /* 두 번째 버튼 색상 */
+        }
+        .speak2 {
+            background-color: #77a7f5; /* 두 번째 버튼 색상 */
+        }
+        .titl {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
+            font-weight: bold;
+            margin: 20px;
+        }
+        .lef {
+            width: 50%;
+            text-align: left;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .rig {
+            width: 50%;
+            text-align: right;
+            padding: 10px;
+            cursor: pointer;
         }
 
         /* 화면의 width가 작아질수록 버튼의 개수를 줄입니다. */
         @media (max-width: 768px) {
             .button {
-                width: calc(80% / 2 - 8px); /* 2개의 버튼으로 나누기 */
+                width: calc(100% / 3 ); /* 2개의 버튼으로 나누기 */
+            }
+            .speak_button {
+                width: calc(100% / 2); /* 2개의 버튼으로 나누기 */
             }
         }
 
         @media (max-width: 240px) {
             .button {
-                width: 80%; /* 1개의 버튼으로 나누기 */
+                width: 100%; /* 1개의 버튼으로 나누기 */
+            }
+            .speak_button {
+                width: 100%; /* 1개의 버튼으로 나누기 */
             }
         }
     </style>
 </head>
 <body>
+    <div class="titl">
+        <div class="lef">⬅ 모를때 슬라이드</div>
+        <div class="rig">알때 슬라이드 ➡</div>
+    </div>
     <div class="card-container"></div>
+    <div class="button-container">
+        <a href="#" class="speak_button speak1">🔊  단어</a>
+        <a href="#" class="speak_button speak2">🔊  단어&뜻</a>
+    </div>
     <div class="button-container">
         <a href="#" class="button button0">미학습단어</a>
         <a href="#" class="button button1">모르는단어</a>
         <a href="#" class="button button2">기억한단어</a>
+        <a href="#" class="button resetbutton">단어 초기화</a>
     </div>
 </body>
 </html>

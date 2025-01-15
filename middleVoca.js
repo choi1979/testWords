@@ -11,118 +11,16 @@ var middleVoca = (function(){
     var knownWords = [];    // 학습한 단어 - 아는 단어
     var unknownWords=[];    // 학습한 단어 - 모르는 단어
 
-    var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것
-
-
-    function initStudyArray(){
-        $.each(Array(word.length), function (index) {
-            notStudyWords.push(index);
-        });
-    }
-
-    function getStudyInfo() {
-        //로컬 스토리지 사용 하여 학습 진행을 저장
-        if (typeof (Storage) !== "undefined") {
-            var a = localStorage.getItem("knownWords");
-            var b = localStorage.getItem("unknownWords");
-            var notStudyWord = localStorage.getItem("notStudyWord");
-            var modeStr = localStorage.getItem("mode");
-            console.log("getStudyInfo : "+modeStr);
-            mode = (modeStr) ? parseInt(modeStr) : 0;
-            if (a) knownWords = JSON.parse(a);
-            if (b) unknownWords = JSON.parse(b);
-            if (notStudyWord){
-                notStudyWords = JSON.parse(notStudyWord);
-            }else{
-                initStudyArray();
-            }
-        } else {
-            console.log('Sorry! No Web Storage support..');
-        }
-    }
-    function saveStudyInfo() {
-        //로컬 스토리지 사용 하여 학습 진행을 저장
-        if (typeof (Storage) !== "undefined") {
-            localStorage.setItem("knownWords", JSON.stringify(knownWords));
-            localStorage.setItem("unknownWords", JSON.stringify(unknownWords));
-            localStorage.setItem("notStudyWord", JSON.stringify(notStudyWords));
-            localStorage.setItem("mode", JSON.stringify(mode));
-
-        } else {
-            console.log('Sorry! No Web Storage support..');
-        }
-    }
-
-    function modeSet(num,str){
-
-        if((num == 1 && unknownWords.length == 0) || (num == 2 && knownWords.length == 0)) {
-             alert('저장된 단어가 없습니다.');
-             mode = 0;
-             return;
-        }
-        wordNumArr = [];
-        $(".card").removeClass('button'+mode);
-        mode = num;
-        $(".card").addClass('button'+num);
-        switch(num) {
-            case 0 :
-                wordNumArr = JSON.parse(JSON.stringify(notStudyWords));
-                break;
-            case 1 :
-                wordNumArr = JSON.parse(JSON.stringify(unknownWords));
-                break;
-            case 2 :
-                wordNumArr = JSON.parse(JSON.stringify(knownWords));
-                break;
-        }
-        if(str == 'init') makingCard(wordNumArr);
-        else if(str == 'change') changeCard(wordNumArr);
-    }
-    function makingCard(wordNumArr){
-        const cardContainer = $('.card-container');
-        const numCards = 5;// word.length;
-
-        for (let i = 0; i < numCards; i++) {
-            const cardId = `card-${i}`;
-            const card = $('<div>').addClass('card').attr('id', cardId);
-            card.css({
-                'z-index': numCards - i,
-                // 'transform': `translateZ(${-i}px)`
-            });
-            if (i > 1) {
-                const prevCard = $(`#card-${i - 1}`);
-                const leftValue = parseInt(prevCard.css('left')) - 2;
-                card.css('left', `${leftValue}px`);
-            }
-
-            const frontSpan = $('<span>').text(word[wordNumArr[i]]);
-            const backSpan = $('<span>').text(voca[word[wordNumArr[i]]]);
-
-            // const frontSpan = $('<span>').text(Object.keys(voca)[i]);
-            // const backSpan = $('<span>').text(voca[Object.keys(voca)[i]]);
-
-            const front = $('<div>').addClass('front').append(frontSpan);
-            const back = $('<div>').addClass('back').append(backSpan);
-            card.append(front).append(back);
-            cardContainer.append(card);
-
-        }
-    }
-    function changeCard(wordNumArr){
-        vocaNum = 0;
-        const numCards = 5;
-        for (let i = 0; i < numCards; i++) {
-            $(`#card-${i} .front span`).text(word[wordNumArr[vocaNum + i]]);
-            $(`#card-${i} .back span`).text(voca[word[wordNumArr[vocaNum+i]]]);
-        }
-    }
+    var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것    
 
     $(document).ready(function() {
         getStudyInfo();
 
         modeSet(mode, 'init');
 
-        $('.card').on('click', function() {
+        $('.card').on('click', function(event) {
+            console.log('card click');
+            // event.preventDefault();
             const card = $(this);
             if (card.hasClass('flip')) {
                 card.removeClass('flip');
@@ -136,6 +34,11 @@ var middleVoca = (function(){
         $('.card').on('touchstart', function(e) {
             startX = e.originalEvent.changedTouches[0].pageX;
         });
+        // card의 터리 드래그에는 반응하지 않게 하기
+        $('.card').on('touchmove', function(e) {
+            e.preventDefault();
+        });      
+
         $('.card').on('touchend', function(e) {
             endX = e.originalEvent.changedTouches[0].pageX;
             if (startX - endX > 50) {
@@ -214,9 +117,10 @@ var middleVoca = (function(){
                 console.log('right');
             }
         });
-        $('.button').on('click', function(event) {
+
+        $('.button').on('click', function(event) {        
             console.log('button clicked!'+(event.currentTarget.className == 'button button1'));
-            event.preventDefault();
+            // event.preventDefault();
             if(event.currentTarget.className == 'button button0'){
                 // 전체 단어
                 modeSet(0, 'change');
@@ -226,6 +130,17 @@ var middleVoca = (function(){
             }else if(event.currentTarget.className == 'button button2'){
                 // 기억한 단어
                 modeSet(2,'change');
+            }else if(event.currentTarget.className == 'button resetbutton'){
+                // 초기화
+                modeSet(999, 'change');
+            }
+        });
+        $('.speak_button').on('click', function(event) {
+            if(event.currentTarget.className == 'speak_button speak1'){
+
+                speakWord();
+            }else if(event.currentTarget.className == 'speak_button speak2'){
+                speakWordNkorean()
             }
         });
     });
@@ -268,7 +183,134 @@ var middleVoca = (function(){
             }
         }
     }
+    function initStudyArray(){
+        $.each(Array(word.length), function (index) {
+            notStudyWords.push(index);
+        });
+    }
 
+    function getStudyInfo() {
+        //로컬 스토리지 사용 하여 학습 진행을 저장
+        if (typeof (Storage) !== "undefined") {
+            var a = localStorage.getItem("knownWords");
+            var b = localStorage.getItem("unknownWords");
+            var notStudyWord = localStorage.getItem("notStudyWord");
+            var modeStr = localStorage.getItem("mode");
+            console.log("getStudyInfo : "+modeStr);
+            mode = (modeStr) ? parseInt(modeStr) : 0;
+            if (a) knownWords = JSON.parse(a);
+            if (b) unknownWords = JSON.parse(b);
+            if (notStudyWord){
+                notStudyWords = JSON.parse(notStudyWord);
+            }else{
+                initStudyArray();
+            }
+        } else {
+            console.log('Sorry! No Web Storage support..');
+        }
+    }
+    function saveStudyInfo() {
+        //로컬 스토리지 사용 하여 학습 진행을 저장
+        if (typeof (Storage) !== "undefined") {
+            localStorage.setItem("knownWords", JSON.stringify(knownWords));
+            localStorage.setItem("unknownWords", JSON.stringify(unknownWords));
+            localStorage.setItem("notStudyWord", JSON.stringify(notStudyWords));
+            localStorage.setItem("mode", JSON.stringify(mode));
+
+        } else {
+            console.log('Sorry! No Web Storage support..');
+        }
+    }
+
+    function modeSet(num,str){
+        console.log('modeSet : '+num+'  str : '+str);
+        if((num == 1 && unknownWords.length == 0) || (num == 2 && knownWords.length == 0)) {
+             alert('저장된 단어가 없습니다.');
+             mode = 0;
+             return;
+        }
+        wordNumArr = [];
+        $(".card").removeClass('button'+mode);
+        mode = num;
+        $(".card").addClass('button'+num);
+        switch(num) {
+            case 0 :
+                wordNumArr = JSON.parse(JSON.stringify(notStudyWords));
+                break;
+            case 1 :
+                wordNumArr = JSON.parse(JSON.stringify(unknownWords));
+                break;
+            case 2 :
+                wordNumArr = JSON.parse(JSON.stringify(knownWords));
+                break;
+            case 999 :
+                notStudyWords=[];   
+                knownWords = [];    
+                unknownWords=[]; 
+                initStudyArray()
+                wordNumArr = JSON.parse(JSON.stringify(notStudyWords));
+                saveStudyInfo();
+                mode = 0;
+                break
+        }
+        if(str == 'init') makingCard(wordNumArr);
+        else if(str == 'change') changeCard(wordNumArr);
+    }
+    function makingCard(wordNumArr){
+        const cardContainer = $('.card-container');
+        const numCards = 5;// word.length;
+
+        for (let i = 0; i < numCards; i++) {
+            const cardId = `card-${i}`;
+            const card = $('<div>').addClass('card').attr('id', cardId);
+            card.css({
+                'z-index': numCards - i,
+                // 'transform': `translateZ(${-i}px)`
+            });
+            if (i > 1) {
+                const prevCard = $(`#card-${i - 1}`);
+                const leftValue = parseInt(prevCard.css('left')) - 2;
+                card.css('left', `${leftValue}px`);
+            }
+
+            const frontSpan = $('<span>').text(word[wordNumArr[i]]);
+            const backSpan = $('<span>').text(voca[word[wordNumArr[i]]]);
+
+            // const frontSpan = $('<span>').text(Object.keys(voca)[i]);
+            // const backSpan = $('<span>').text(voca[Object.keys(voca)[i]]);
+
+            const front = $('<div>').addClass('front').append(frontSpan);
+            const back = $('<div>').addClass('back').append(backSpan);
+            card.append(front).append(back);
+            cardContainer.append(card);
+
+        }
+    }
+    function changeCard(wordNumArr){
+        vocaNum = 0;
+        const numCards = 5;
+        for (let i = 0; i < numCards; i++) {
+            $(`#card-${i} .front span`).text(word[wordNumArr[vocaNum + i]]);
+            $(`#card-${i} .back span`).text(voca[word[wordNumArr[vocaNum+i]]]);
+        }
+    }
+    function speakWord() {        
+        // console.log(vocaNum+'  ,  '+ word[wordNumArr[vocaNum]]);
+        const utterance = new SpeechSynthesisUtterance(word[wordNumArr[vocaNum]]);
+        utterance.lang = 'en-US'; // 언어 설정 (영어)
+        speechSynthesis.speak(utterance);        
+    }
+    function speakWordNkorean() {        
+        // console.log(vocaNum+'  ,  '+ voca[word[wordNumArr[vocaNum]]]);
+        const utteranceEng = new SpeechSynthesisUtterance(word[wordNumArr[vocaNum]]);
+        utteranceEng.lang = 'en-US'; // 언어 설정 (영어)
+        const utteranceKor = new SpeechSynthesisUtterance(voca[word[wordNumArr[vocaNum]]]);
+        utteranceKor.lang = 'ko-KR'; // 언어 설정 (영어)
+        speechSynthesis.speak(utteranceEng);       
+        utteranceEng.onend = () => {
+            speechSynthesis.speak(utteranceKor);
+        }; 
+    }
 
 
     // 클로저를 반환한다.
