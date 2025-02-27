@@ -82,7 +82,7 @@ var middleVoca = (function(){
                         // console.log(vocaNum,wordNumArr);
                         // 아는 단어배열에서 삭제
                         knownWords.splice(vocaNum, 1);
-                        // 모르는 단어 배열에 추가하고 정렬
+                        // 모르는 단어 배열에 추가하고 정렬정
                         if (!unknownWords.includes(wordNumArr[vocaNum])) {
                             unknownWords.push(wordNumArr[vocaNum]);
                             unknownWords.sort();
