@@ -79,7 +79,7 @@ var middleVoca = (function(){
                         // unknownWords.sort();
                     }else if(mode == 2) {
                         //아는 단어
-                        console.log(vocaNum,wordNumArr);
+                        // console.log(vocaNum,wordNumArr);
                         // 아는 단어배열에서 삭제
                         knownWords.splice(vocaNum, 1);
                         // 모르는 단어 배열에 추가하고 정렬
@@ -113,7 +113,7 @@ var middleVoca = (function(){
                         // 모른는 단어 배열에서 삭제
                         unknownWords.splice(vocaNum, 1);
                         // 아는 단어 배열에 추가하고 정렬
-                        console.log(unknownWords.includes(word[wordNumArr[vocaNum]]));
+                        // console.log(unknownWords.includes(word[wordNumArr[vocaNum]]));
                         if (!knownWords.includes(wordNumArr[vocaNum])) {
                             knownWords.push(wordNumArr[vocaNum]);
                             knownWords.sort();
@@ -193,8 +193,8 @@ var middleVoca = (function(){
             for(var i =0; i <2; i++){
                 $(`#card-${i} .front span`).text((word[wordNumArr[vocaNum + i]]) ? word[wordNumArr[vocaNum + i]] : word[wordNumArr[0]]);
                 $(`#card-${i} .back span`).text((voca[word[wordNumArr[vocaNum+i]]])?voca[word[wordNumArr[vocaNum+i]]] : voca[word[wordNumArr[0]]]);
-                console.log($(`#card-${i} .front span`).text()+"   //   "+ $(`#card-${i} .back span`).text());
-                console.log(voca[word[wordNumArr[vocaNum+i]]]);
+                // console.log($(`#card-${i} .front span`).text()+"   //   "+ $(`#card-${i} .back span`).text());
+                // console.log(voca[word[wordNumArr[vocaNum+i]]]);
             }
         }
         $('.currentP').text(vocaNum+1);
@@ -213,7 +213,7 @@ var middleVoca = (function(){
             var b = localStorage.getItem("unknownWords");
             var notStudyWord = localStorage.getItem("notStudyWord");
             var modeStr = localStorage.getItem("mode");
-            console.log("getStudyInfo : "+modeStr);
+            // console.log("getStudyInfo : "+modeStr);
             mode = (modeStr) ? parseInt(modeStr) : 0;
             if (a) knownWords = JSON.parse(a);
             if (b) unknownWords = JSON.parse(b);
@@ -285,7 +285,7 @@ var middleVoca = (function(){
         saveStudyInfo();
     }
     function makingCard(wordNumArr){
-        console.log('wordNumArr  :  '+ wordNumArr.length);
+        // console.log('wordNumArr  :  '+ wordNumArr.length);
         const cardContainer = $('.card-container');
         const numCards = 5;
 
