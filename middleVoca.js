@@ -21,14 +21,28 @@ var middleVoca = (function(){
         $('.card').on('click', function(event) {
             console.log('card click');
             // event.preventDefault();
-            const card = $(this);
+            const card = $('.card');
+            const front = $('.front');
+            const back = $('.back');
             if (card.hasClass('flip')) {
                 card.removeClass('flip');
+                back.hide();
+                front.show();
             } else {
                 card.addClass('flip');
+                front.hide();
+                back.show();
             }
         });
-
+        $('.dic').on('click', function(event){
+            const wordStr = word[wordNumArr[vocaNum]];
+            openPopup();
+            searchWord(wordStr);
+        });
+        $('.close').on('click', function(event){
+            closePopup();
+        });
+        
         let startX=0;
         let endX=0;
         $('.card').on('touchstart', function(e) {
@@ -144,7 +158,13 @@ var middleVoca = (function(){
             }
         });
     });
+    function openPopup() {
+        document.getElementById("popup").style.display = "block";
+    }
 
+    function closePopup() {
+        document.getElementById("popup").style.display = "none";
+    }
     function reSetPositionVoca(target){
         console.log('reSetPositionVoca  :  '+ target);
         target.animate({opacity: 100, marginLeft: '0px'}, 1, function() {
@@ -160,20 +180,15 @@ var middleVoca = (function(){
         console.log('unknownWords : '+ JSON.stringify(unknownWords));
         console.log('knownWords : '+ JSON.stringify(knownWords));
         if(wordNumArr.length == 0) {
-            for (var i = 0; i < 2; i++) {
-                // console.log('front : '  + $(`#card-${i} .front span`).text());
-                // console.log('back : '  + $(`#card-${i} .back span`).text());
-                $(`#card-${i} .front span`).text((word[wordNumArr[vocaNum + i]]) ? word[wordNumArr[vocaNum + i]] : "");
-                $(`#card-${i} .back span`).text((voca[word[wordNumArr[vocaNum + i]]]) ? voca[word[wordNumArr[vocaNum + i]]] : "");
-                // console.log('front>>>> : '  + $(`#card-${i} .front span`).text());
-                // console.log('back>>>> : '  + $(`#card-${i} .back span`).text());
-            }
-            alert('저장된 단어가 없습니다.');
+            alert('저장된 단어가 없습니다.2');
+            modeSet(0, 'change');
         }else if(wordNumArr.length == 1){
+            console.log('wordNumArr.length = '+ wordNumArr.length);
+            console.log('word[wordNumArr[0] = '+word[wordNumArr[0]]);
             $(`#card-0 .front span`).text(word[wordNumArr[0]]);
             $(`#card-0 .back span`).text(voca[word[wordNumArr[0]]]);
-            $(`#card-1 .front span`).text("");
-            $(`#card-1 .back span`).text("");
+            $(`#card-1 .front span`).text(word[wordNumArr[0]]);
+            $(`#card-1 .back span`).text(voca[word[wordNumArr[0]]]);
         }else{
             for(var i =0; i <2; i++){
                 $(`#card-${i} .front span`).text((word[wordNumArr[vocaNum + i]]) ? word[wordNumArr[vocaNum + i]] : word[wordNumArr[0]]);
@@ -182,6 +197,8 @@ var middleVoca = (function(){
                 console.log(voca[word[wordNumArr[vocaNum+i]]]);
             }
         }
+        $('.currentP').text(vocaNum+1);
+        $('.totalP').text(wordNumArr.length);
     }
     function initStudyArray(){
         $.each(Array(word.length), function (index) {
@@ -225,14 +242,17 @@ var middleVoca = (function(){
     function modeSet(num,str){
         console.log('modeSet : '+num+'  str : '+str);
         if((num == 1 && unknownWords.length == 0) || (num == 2 && knownWords.length == 0)) {
-             alert('저장된 단어가 없습니다.');
-             mode = 0;
-             return;
+            if(str == 'change') {
+                alert('저장된 단어가 없습니다. 1');
+                // mode = 0;
+                return;
+            }else{
+                num = 0;
+            }
         }
         wordNumArr = [];
         $(".card").removeClass('button'+mode);
         mode = num;
-        $(".card").addClass('button'+num);
         switch(num) {
             case 0 :
                 wordNumArr = JSON.parse(JSON.stringify(notStudyWords));
@@ -249,16 +269,25 @@ var middleVoca = (function(){
                 unknownWords=[]; 
                 initStudyArray()
                 wordNumArr = JSON.parse(JSON.stringify(notStudyWords));
-                saveStudyInfo();
                 mode = 0;
-                break
+                // saveStudyInfo();
+                break;
         }
-        if(str == 'init') makingCard(wordNumArr);
-        else if(str == 'change') changeCard(wordNumArr);
+        // console.log(wordNumArr, word[wordNumArr[vocaNum]]);
+        if(str == 'init') {
+            makingCard(wordNumArr);
+            $(".card").addClass('button'+num);
+        }
+        else if(str == 'change') {
+            $(".card").addClass('button'+num);
+            changeCard(wordNumArr);
+        }
+        saveStudyInfo();
     }
     function makingCard(wordNumArr){
+        console.log('wordNumArr  :  '+ wordNumArr.length);
         const cardContainer = $('.card-container');
-        const numCards = 5;// word.length;
+        const numCards = 5;
 
         for (let i = 0; i < numCards; i++) {
             const cardId = `card-${i}`;
@@ -276,22 +305,31 @@ var middleVoca = (function(){
             const frontSpan = $('<span>').text(word[wordNumArr[i]]);
             const backSpan = $('<span>').text(voca[word[wordNumArr[i]]]);
 
-            // const frontSpan = $('<span>').text(Object.keys(voca)[i]);
-            // const backSpan = $('<span>').text(voca[Object.keys(voca)[i]]);
-
             const front = $('<div>').addClass('front').append(frontSpan);
             const back = $('<div>').addClass('back').append(backSpan);
             card.append(front).append(back);
             cardContainer.append(card);
-
         }
+        $('.currentP').text(vocaNum+1);
+        $('.totalP').text(wordNumArr.length);
+
     }
     function changeCard(wordNumArr){
         vocaNum = 0;
+        // const numCards = wordNumArr.length > 5 ? 5 :  wordNumArr.length;
         const numCards = 5;
+        // console.log('changeCard  ::  wordNumArr  :  '+ wordNumArr.length);
+        $('.currentP').text(vocaNum+1);
+        $('.totalP').text(wordNumArr.length);
         for (let i = 0; i < numCards; i++) {
-            $(`#card-${i} .front span`).text(word[wordNumArr[vocaNum + i]]);
-            $(`#card-${i} .back span`).text(voca[word[wordNumArr[vocaNum+i]]]);
+            // console.log('>>>>>>>>  ::  vocaNum  :  '+ word[wordNumArr[vocaNum+i]], wordNumArr[vocaNum+i]);
+            if(word[wordNumArr[vocaNum+i]]){
+                $(`#card-${i} .front span`).text(word[wordNumArr[vocaNum+i]]);
+                $(`#card-${i} .back span`).text(voca[word[wordNumArr[vocaNum+i]]]);
+            }else{
+                $(`#card-${i} .front span`).text('');
+                $(`#card-${i} .back span`).text('');
+            }
         }
     }
     function speakWord() {        
@@ -310,6 +348,46 @@ var middleVoca = (function(){
         utteranceEng.onend = () => {
             speechSynthesis.speak(utteranceKor);
         }; 
+    }
+
+    async function searchWord(wordStr) {
+        const word = wordStr;
+        if (!word) return alert("단어를 입력하세요!");
+
+        const url = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+
+        try {
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (!Array.isArray(data)) {
+                document.getElementById("meaningBox").innerHTML = `<p>❌ 단어를 찾을 수 없습니다.</p>`;
+                return;
+            }
+
+            let resultHTML = `<h3>📌 단어: ${word}</h3>`;
+
+            data.forEach(entry => {
+                entry.meanings.forEach(meaning => {
+                    resultHTML += `<h4>🔹 품사: ${meaning.partOfSpeech}</h4>`;
+                    meaning.definitions.forEach((def, index) => {
+                        resultHTML += `<p><strong>${index + 1}. 뜻:</strong> ${def.definition}</p>`;
+                        if (def.example) {
+                            resultHTML += `<p>📖 <em>예문:</em> ${def.example}</p>`;
+                        }
+                    });
+                });
+            });
+
+            // 결과 표시
+            document.getElementById("meaningBox").innerHTML = resultHTML;
+            // document.getElementById("meaning").innerText = `str`;
+
+
+        } catch (error) {
+            console.error("오류 발생:", error);
+            alert("데이터를 불러오는 중 오류가 발생했습니다.");
+        }
     }
 
 

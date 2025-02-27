@@ -25,7 +25,7 @@
             border: 1px solid #222222;
             border-radius: 30px;
             user-select: none;
-            font-size: 10px;
+            font-size: 25px;
         }
 
         .card.flip {
@@ -48,7 +48,7 @@
         }
         .card .front span {
             width: 80%;
-            font-size: 25px;
+            /*font-size: 25px;*/
             display: flex;
             justify-content: center;
             align-items: center;
@@ -63,7 +63,7 @@
 
         .card .back span {
             width: 80%;
-            font-size: 25px;
+            /*font-size: 25px;*/
             display: flex;
             justify-content: center;
             align-items: center;
@@ -73,13 +73,20 @@
             width: 100%;
             height: 100%;
         }
+        .navi-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: -25px;
+        }
         .button-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
             margin: 20px;
-            /* border: #222222 solid 1px; */
-            /* border-radius: 10px; */
+            /*border: 1px solid goldenrod;*/
+            border: 1mm ridge rgba(211, 220, 50, .6);
+            border-radius: 5px;
             padding: 4px 0  4px 0 ;
         }
 
@@ -91,10 +98,9 @@
             text-decoration: none;
             font-size: 16px;
             margin: 4px;
-            border-radius: 4px;
+            border-radius: 50%;
             cursor: pointer;
             width: calc(100% / 3 ); /* 3개의 버튼으로 나누기 */
-            
         }
 
         .button0 {
@@ -124,7 +130,7 @@
             margin: 4px;
             border-radius: 4px;
             cursor: pointer;
-            width: calc(100% / 2); /* 2개의 버튼으로 나누기 */
+            width: calc(100% / 3); /* 2개의 버튼으로 나누기 */
             
         }
 
@@ -155,24 +161,87 @@
             padding: 10px;
             cursor: pointer;
         }
+        .dic {
+            position: absolute;
+            top:  calc(100% /10);
+        }
+
 
         /* 화면의 width가 작아질수록 버튼의 개수를 줄입니다. */
-        @media (max-width: 768px) {
-            .button {
-                width: calc(100% / 3 ); /* 2개의 버튼으로 나누기 */
+        @media (min-width: 768px) {
+            .card {
+                width: calc(100% *0.8);
+                height: calc(100% / 3);
+                font-size: 50px;
             }
-            .speak_button {
-                width: calc(100% / 2); /* 2개의 버튼으로 나누기 */
-            }
+            /*.button {*/
+            /*    width: calc(100% / 3 ); !* 2개의 버튼으로 나누기 *!*/
+            /*}*/
+            /*.speak_button {*/
+            /*    width: calc(100% / 3); !* 2개의 버튼으로 나누기 *!*/
+            /*}*/
         }
 
         @media (max-width: 240px) {
+            .card {
+                position: absolute;
+                width: calc(100% *0.8);
+                height: calc(100% / 3);
+                font-size: 10px;
+            }
             .button {
-                width: 100%; /* 1개의 버튼으로 나누기 */
+                /*width: calc(100% /3); !* 1개의 버튼으로 나누기 *!*/
+                padding: 10px 5px;
+                font-size: 10px;
+                white-space: nowrap;
+                /*text-overflow: ellipsis;*/
+                overflow: hidden;
             }
             .speak_button {
-                width: 100%; /* 1개의 버튼으로 나누기 */
+                /*width: calc(100% /3); !* 1개의 버튼으로 나누기 *!*/
+                padding: 10px 5px;
+                font-size: 8px;
             }
+            .button-container{
+                margin: 5px;
+            }
+            .titl {
+                margin : 5px;
+            }
+        }
+        .popup {
+            display: none; /* 기본적으로 숨김 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+            z-index: 99;
+        }
+        .popup-content {
+            background: white;
+            width: 80%;
+            height: 85%;
+            padding: 20px;
+            margin: 10% auto;
+            border-radius: 10px;
+            text-align: left;
+            position: relative;
+            /*overflow: scroll;*/
+        }
+        .meaningBox{
+            background: white;
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+        }
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -181,7 +250,9 @@
         <div class="lef">⬅ 모를때 슬라이드</div>
         <div class="rig">알때 슬라이드 ➡</div>
     </div>
+    <div class="dic">📖 영영사전 </div>
     <div class="card-container"></div>
+    <div class="navi-container"><span class="currentP">1</span><span>&nbsp;&nbsp;/&nbsp;&nbsp;</span><span class="totalP">10</span></div>
     <div class="button-container">
         <a href="#" class="speak_button speak1">🔊  단어</a>
         <a href="#" class="speak_button speak2">🔊  단어&뜻</a>
@@ -190,7 +261,13 @@
         <a href="#" class="button button0">미학습단어</a>
         <a href="#" class="button button1">모르는단어</a>
         <a href="#" class="button button2">기억한단어</a>
-        <a href="#" class="button resetbutton">단어 초기화</a>
+        <a href="#" class="button resetbutton">단어초기화</a>
+    </div>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close">&times;</span>
+            <div class="meaningBox" id="meaningBox">이것은 커스텀 팝업입니다.</div>
+        </div>
     </div>
 </body>
 </html>
