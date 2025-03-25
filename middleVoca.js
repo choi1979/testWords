@@ -10,6 +10,8 @@ var middleVoca = (function(){
     var notStudyWords=[];   // 학습하지 않은 단어
     var knownWords = [];    // 학습한 단어 - 아는 단어
     var unknownWords=[];    // 학습한 단어 - 모르는 단어
+    var autoWords = [];     // 자동으로 실행할 단어
+    var autoVocaNum = 0;
 
     var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것    
 
@@ -57,77 +59,79 @@ var middleVoca = (function(){
             endX = e.originalEvent.changedTouches[0].pageX;
             if (startX - endX > 50) {
                 // 좌측으로 플리킹  -- 모르는 단어
-                $(this).animate({opacity: 0, marginLeft: '-100px'}, 500, function() {
-                    $(this).hide();
-                    //전체
-                    if(mode == 0){
-                        //학습 안된 단어
-                        // 학습 안된 단어 배열에서 삭제
-                        notStudyWords.splice(vocaNum, 1);
-                        // 모르는 단어배열로 push
-                        if (!unknownWords.includes(wordNumArr[vocaNum])) {
-                            unknownWords.push(wordNumArr[vocaNum]);
-                            unknownWords.sort();
-                        }
-                        // 단어 번호 삭제
-                        wordNumArr.splice(vocaNum, 1);
-                    }else if(mode == 1){
-                        //모르는 단어
-                        // 모르는 단어를 모르는 단어쪽으로 넘기면 아무일도 일어나지 않는다
-                        // 다음 단어
-                        vocaNum++;
-                        // unknownWords.sort();
-                    }else if(mode == 2) {
-                        //아는 단어
-                        // console.log(vocaNum,wordNumArr);
-                        // 아는 단어배열에서 삭제
-                        knownWords.splice(vocaNum, 1);
-                        // 모르는 단어 배열에 추가하고 정렬정
-                        if (!unknownWords.includes(wordNumArr[vocaNum])) {
-                            unknownWords.push(wordNumArr[vocaNum]);
-                            unknownWords.sort();
-                        }
-                        // 단어번호 삭제
-                        wordNumArr.splice(vocaNum, 1);
-                    }
-                    reSetPositionVoca($(this));
-                });
+                left_sliding($(this));
+                // $(this).animate({opacity: 0, marginLeft: '-100px'}, 500, function() {
+                //     $(this).hide();
+                //     //전체
+                //     if(mode == 0){
+                //         //학습 안된 단어
+                //         // 학습 안된 단어 배열에서 삭제
+                //         notStudyWords.splice(vocaNum, 1);
+                //         // 모르는 단어배열로 push
+                //         if (!unknownWords.includes(wordNumArr[vocaNum])) {
+                //             unknownWords.push(wordNumArr[vocaNum]);
+                //             unknownWords.sort();
+                //         }
+                //         // 단어 번호 삭제
+                //         wordNumArr.splice(vocaNum, 1);
+                //     }else if(mode == 1){
+                //         //모르는 단어
+                //         // 모르는 단어를 모르는 단어쪽으로 넘기면 아무일도 일어나지 않는다
+                //         // 다음 단어
+                //         vocaNum++;
+                //         // unknownWords.sort();
+                //     }else if(mode == 2) {
+                //         //아는 단어
+                //         // console.log(vocaNum,wordNumArr);
+                //         // 아는 단어배열에서 삭제
+                //         knownWords.splice(vocaNum, 1);
+                //         // 모르는 단어 배열에 추가하고 정렬정
+                //         if (!unknownWords.includes(wordNumArr[vocaNum])) {
+                //             unknownWords.push(wordNumArr[vocaNum]);
+                //             unknownWords.sort();
+                //         }
+                //         // 단어번호 삭제
+                //         wordNumArr.splice(vocaNum, 1);
+                //     }
+                //     reSetPositionVoca($(this));
+                // });
                 console.log('left');
             } else if (endX - startX > 50) {
                 // 우측으로 플리킹  -- 아는 단어
-                $(this).animate({opacity: 0, marginLeft: '100px'}, 500, function() {
-                    $(this).hide();
-                    //전체
-                    if(mode == 0){
-                        //학습 안된 단어
-                        // 학습 안된 단어 배열에서 삭제
-                        notStudyWords.splice(vocaNum, 1);
-                        // 아는 단어배열로 push
-                        if (!knownWords.includes(wordNumArr[vocaNum])) {
-                            knownWords.push(wordNumArr[vocaNum]);
-                        }
-                        // 단어 번호 삭제
-                        wordNumArr.splice(vocaNum, 1);
-                    }else if(mode == 1){
-                        // 모르는 단어
-                        // 모른는 단어 배열에서 삭제
-                        unknownWords.splice(vocaNum, 1);
-                        // 아는 단어 배열에 추가하고 정렬
-                        // console.log(unknownWords.includes(word[wordNumArr[vocaNum]]));
-                        if (!knownWords.includes(wordNumArr[vocaNum])) {
-                            knownWords.push(wordNumArr[vocaNum]);
-                            knownWords.sort();
-                        }
-                        // 단어 번호 삭제
-                        wordNumArr.splice(vocaNum, 1);
-                    }else if(mode == 2){
-                        // 아는 단어를 아는 단어쪽으로 넘기면 아무일도 일어나지 않는다
-                        // 다음 단어
-                        vocaNum++
-                    }
-
-                    reSetPositionVoca($(this));
-                });
+                right_sliding($(this));
+                // $(this).animate({opacity: 0, marginLeft: '100px'}, 500, function() {
+                //     $(this).hide();
+                //     //전체
+                //     if(mode == 0){
+                //         //학습 안된 단어
+                //         // 학습 안된 단어 배열에서 삭제
+                //         notStudyWords.splice(vocaNum, 1);
+                //         // 아는 단어배열로 push
+                //         if (!knownWords.includes(wordNumArr[vocaNum])) {
+                //             knownWords.push(wordNumArr[vocaNum]);
+                //         }
+                //         // 단어 번호 삭제
+                //         wordNumArr.splice(vocaNum, 1);
+                //     }else if(mode == 1){
+                //         // 모르는 단어
+                //         // 모른는 단어 배열에서 삭제
+                //         unknownWords.splice(vocaNum, 1);
+                //         // 아는 단어 배열에 추가하고 정렬
+                //         // console.log(unknownWords.includes(word[wordNumArr[vocaNum]]));
+                //         if (!knownWords.includes(wordNumArr[vocaNum])) {
+                //             knownWords.push(wordNumArr[vocaNum]);
+                //             knownWords.sort();
+                //         }
+                //         // 단어 번호 삭제
+                //         wordNumArr.splice(vocaNum, 1);
+                //     }else if(mode == 2){
+                //         // 아는 단어를 아는 단어쪽으로 넘기면 아무일도 일어나지 않는다
+                //         // 다음 단어
+                //         vocaNum++
+                //     }
+                //
+                //     reSetPositionVoca($(this));
+                // });
                 console.log('right');
             }
         });
@@ -150,14 +154,90 @@ var middleVoca = (function(){
             }
         });
         $('.speak_button').on('click', function(event) {
-            if(event.currentTarget.className == 'speak_button speak1'){
 
-                speakWord();
+
+            if(event.currentTarget.className == 'speak_button speak1'){
+                    speakWord();
             }else if(event.currentTarget.className == 'speak_button speak2'){
                 speakWordNkorean()
             }
+            // else if(event.currentTarget.className == 'speak_button speak3'){
+            //     autoSpeakWord();
+            // }
         });
     });
+    function left_sliding(target) {
+        target.animate({opacity: 0, marginLeft: '-100px'}, 500, function() {
+            $(this).hide();
+            //전체
+            if(mode == 0){
+                //학습 안된 단어
+                // 학습 안된 단어 배열에서 삭제
+                notStudyWords.splice(vocaNum, 1);
+                // 모르는 단어배열로 push
+                if (!unknownWords.includes(wordNumArr[vocaNum])) {
+                    unknownWords.push(wordNumArr[vocaNum]);
+                    unknownWords.sort();
+                }
+                // 단어 번호 삭제
+                wordNumArr.splice(vocaNum, 1);
+            }else if(mode == 1){
+                //모르는 단어
+                // 모르는 단어를 모르는 단어쪽으로 넘기면 아무일도 일어나지 않는다
+                // 다음 단어
+                vocaNum++;
+                // unknownWords.sort();
+            }else if(mode == 2) {
+                //아는 단어
+                // console.log(vocaNum,wordNumArr);
+                // 아는 단어배열에서 삭제
+                knownWords.splice(vocaNum, 1);
+                // 모르는 단어 배열에 추가하고 정렬정
+                if (!unknownWords.includes(wordNumArr[vocaNum])) {
+                    unknownWords.push(wordNumArr[vocaNum]);
+                    unknownWords.sort();
+                }
+                // 단어번호 삭제
+                wordNumArr.splice(vocaNum, 1);
+            }
+            reSetPositionVoca($(this));
+        });
+    }
+    function right_sliding(target) {
+        console.log('right sliding');
+        target.animate({opacity: 0, marginLeft: '100px'}, 500, function() {
+            $(this).hide();
+            //전체
+            if (mode == 0) {
+                //학습 안된 단어
+                // 학습 안된 단어 배열에서 삭제
+                notStudyWords.splice(vocaNum, 1);
+                // 아는 단어배열로 push
+                if (!knownWords.includes(wordNumArr[vocaNum])) {
+                    knownWords.push(wordNumArr[vocaNum]);
+                }
+                // 단어 번호 삭제
+                wordNumArr.splice(vocaNum, 1);
+            } else if (mode == 1) {
+                // 모르는 단어
+                // 모른는 단어 배열에서 삭제
+                unknownWords.splice(vocaNum, 1);
+                // 아는 단어 배열에 추가하고 정렬
+                // console.log(unknownWords.includes(word[wordNumArr[vocaNum]]));
+                if (!knownWords.includes(wordNumArr[vocaNum])) {
+                    knownWords.push(wordNumArr[vocaNum]);
+                    knownWords.sort();
+                }
+                // 단어 번호 삭제
+                wordNumArr.splice(vocaNum, 1);
+            } else if (mode == 2) {
+                // 아는 단어를 아는 단어쪽으로 넘기면 아무일도 일어나지 않는다
+                // 다음 단어
+                vocaNum++
+            }
+            reSetPositionVoca($(this));
+        });
+    }
     function openPopup() {
         document.getElementById("popup").style.display = "block";
     }
@@ -197,6 +277,7 @@ var middleVoca = (function(){
                 // console.log(voca[word[wordNumArr[vocaNum+i]]]);
             }
         }
+        $('.progressbar').css('width', (((vocaNum+1)/wordNumArr.length)*100)+'%');
         $('.currentP').text(vocaNum+1);
         $('.totalP').text(wordNumArr.length);
     }
@@ -310,6 +391,7 @@ var middleVoca = (function(){
             card.append(front).append(back);
             cardContainer.append(card);
         }
+        $('.progressbar').css('width', (((vocaNum+1)/wordNumArr.length)*100)+'%');
         $('.currentP').text(vocaNum+1);
         $('.totalP').text(wordNumArr.length);
 
@@ -319,6 +401,7 @@ var middleVoca = (function(){
         // const numCards = wordNumArr.length > 5 ? 5 :  wordNumArr.length;
         const numCards = 5;
         // console.log('changeCard  ::  wordNumArr  :  '+ wordNumArr.length);
+        $('.progressbar').css('width', (((vocaNum+1)/wordNumArr.length)*100)+'%');
         $('.currentP').text(vocaNum+1);
         $('.totalP').text(wordNumArr.length);
         for (let i = 0; i < numCards; i++) {
@@ -338,11 +421,22 @@ var middleVoca = (function(){
         utterance.lang = 'en-US'; // 언어 설정 (영어)
         speechSynthesis.speak(utterance);        
     }
-    function speakWordNkorean() {        
+    // function autoSpeakWord () {
+    //     console.log('autoSpeakWord');
+    //     autoWords = JSON.parse(JSON.stringify(wordNumArr));
+    //     autoVocaNum=0;
+    //     setTimeout(function(){
+    //         speakWordNkorean(autoWords,autoVocaNum );
+    //         autoVocaNum++;
+    //     }, 1000);
+    // }
+    function speakWordNkorean(_wordNumArr, _vocaNum) {
         // console.log(vocaNum+'  ,  '+ voca[word[wordNumArr[vocaNum]]]);
-        const utteranceEng = new SpeechSynthesisUtterance(word[wordNumArr[vocaNum]]);
+        _wordNumArr = _wordNumArr ? _wordNumArr : wordNumArr;
+        _vocaNum = _vocaNum ? _vocaNum : vocaNum;
+        const utteranceEng = new SpeechSynthesisUtterance(word[_wordNumArr[_vocaNum]]);
         utteranceEng.lang = 'en-US'; // 언어 설정 (영어)
-        const utteranceKor = new SpeechSynthesisUtterance(voca[word[wordNumArr[vocaNum]]]);
+        const utteranceKor = new SpeechSynthesisUtterance(voca[word[_wordNumArr[_vocaNum]]]);
         utteranceKor.lang = 'ko-KR'; // 언어 설정 (영어)
         speechSynthesis.speak(utteranceEng);       
         utteranceEng.onend = () => {
