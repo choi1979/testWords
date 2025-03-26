@@ -11,27 +11,34 @@
             margin: 0px;
         }
         .contents-body{
+            position: relative;
+            width: 100%;
+            height: 50vh;
+            border: 2px solid #22222220;
+            border-radius: 3vh;
 
-
-
+        }
+        .wordBox{
+            position: relative;
+            height: 30vh;
         }
         .card-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 40vh;
+            height: 30vh;
         }
 
         .card {
             position: absolute;
-            width: 300px;
-            height: 200px;
+            width: 35vh;
+            height: 25vh;
             transform-style: preserve-3d;
             transition: transform 0.6s;
             cursor: pointer;
-            background-color: #fefcea;
-            border: 1px solid #222222;
-            border-radius: 30px;
+            background-color: #f5f5f5;
+            /*border: 1px solid #22222220;*/
+            border-radius: 3vh;
             user-select: none;
             font-size: 25px;
         }
@@ -46,6 +53,8 @@
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
+            font-size: 25px;
+            font-weight: unset;
         }
 
         .card .front {
@@ -53,6 +62,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            font-size: 35px;
+            font-weight: bold;
         }
         .card .front span {
             width: 80%;
@@ -84,18 +95,50 @@
         .navi-container {
             display: flex;
             justify-content: center;
-            flex-wrap: wrap;
-            /*margin-top: -25px;*/
+            align-items: center;
+            width: 100%;
+
+        }
+        .nav{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /*flex-wrap: wrap;*/
+            color: white;
+            margin:10px;
+            background-color: #2398F8;
+            border-radius: 12px;
+        }
+        .currentP{
+            text-align: right;
+            /*width: auto;*/
+            margin-left: 10px;
+            margin-right: 5px;
+            padding: 4px;
+            padding-bottom: 1px;
+
+        }
+        .totalP{
+            text-align: left;
+            /*width: auto;*/
+            margin-left: 5px;
+            margin-right: 10px;
+            padding: 4px;
+            padding-bottom: 1px
         }
         .button-container {
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            margin: 20px;
+            margin-top: 10px;
+            margin-bottom: 10px;
             /*border: 1px solid goldenrod;*/
-            border: 1mm ridge rgba(211, 220, 50, .6);
+            border: 2px solid #22222220;
+            /*border: 1mm ridge rgba(211, 220, 50, .6);*/
             border-radius: 5px;
             padding: 4px 0  4px 0 ;
+            position: relative;
+            width: 100%;
         }
 
         .button {
@@ -112,7 +155,7 @@
         }
 
         .button0 {
-            background-color: #fefcea; /* 첫 번째 버튼 색상 */
+            background-color: #f5f5f5; /* 첫 번째 버튼 색상 */
         }
 
         .button1 {
@@ -165,41 +208,95 @@
             background-color: #77a7f5;
             color: white;
         }
-        .lef {
-            position: absolute;
-            top: 180px;
-            left: 10px;
-            width: auto;
-            text-align: center;
+        .wordType{
+            font-size: x-large;
             font-weight: bold;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 80;
-            color: red;
-            font-size: 12px;
-            border-radius: 50px;
-            background-color: #f7b5b090;
-        }
-        .rig {
-            position: absolute;
-            top: 180px;
-            right: 10px;
-            width: auto;
-            text-align: center;
-            font-weight: bold;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 80;
-            color: blue;
-            font-size: 12px;
-            border-radius: 50px;
-            background-color: #2398F890;
-        }
-        .dic {
-            position: absolute;
-            top:  calc(100% /10);
         }
 
+        .guideBox_left {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            left: 10px;
+            width: auto;
+            height: 100%;
+            font-weight: bold;
+            text-align: center;
+            z-index: 80;
+            font-size: 12px;
+            /*background-color: #f7b5b0;*/
+        }
+        .lef {
+            width: auto;
+            /*padding: 10px;*/
+            cursor: pointer;
+            color: red;
+            /*border-radius: 50px;*/
+            /*background-color: #f7b5b0fa;*/
+        }
+        .rig {
+            width: auto;
+            /*padding: 10px;*/
+            cursor: pointer;
+            color: blue;
+            /*border-radius: 50px;*/
+            /*background-color: #2398F890;*/
+        }
+        .guideBox_right {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            right: 10px;
+            width: auto;
+            height: 100%;
+            font-weight: bold;
+            text-align: center;
+            z-index: 80;
+            font-size: 12px;
+            /*background-color: #f7b5b0;*/
+        }
+        .dic_box {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 90%;
+            height: 80px;
+            border: 1px solid #22222220;
+            border-radius: 20px;
+            margin: auto;
+            /*margin-right: auto;*/
+        }
+        .dic {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            width:50px;
+            border-radius: 25px;
+            background-color: #b7acfdfa;
+            margin: 10px;
+        }
+        .speak {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50px;
+            width: 50px;
+            border-radius: 25px;
+            background-color: #ffaa01;
+            margin: 10px;
+            color: white;
+            font-size: 40px;
+            line-height: 50px; /* 높이와 동일하게 설정 */
+        }
+        .speak .play_icon{
+            line-height: 40px;
+            margin-top: 7px;
+            margin-left: 7px;
+        }
 
         /* 화면의 width가 작아질수록 버튼의 개수를 줄입니다. */
         @media (min-width: 768px) {
@@ -297,19 +394,32 @@
     <div class="titl">
         단어 암기
     </div>
-    <div class="contents-body">
-        <div class="dic">📖 영영사전 </div>
-        <div class="lef"> <div>모를때</div><div>-------</div> </div>
-        <div class="rig"> <div>알 때</div><div>-------</div> </div>
-        <div class="card-container"></div>
-        <div class="progressbg"><div class="progressbar"></div></div>
-        <div class="navi-container"><span class="currentP">1</span><span>&nbsp;&nbsp;/&nbsp;&nbsp;</span><span class="totalP">10</span></div>
-    </div>
     <div class="button-container">
-        <a href="#" class="speak_button speak1">🔊  단어</a>
-        <a href="#" class="speak_button speak2">🔊  단어&뜻</a>
-<!--        <a href="#" class="speak_button speak3">🔊  자동재생</a>-->
+        <div class="wordType">미학습 단어</div>
     </div>
+    <div class="contents-body">
+        <div class="wordBox">
+            <div class="guideBox_left"> <div class="lef"> <div>모를때</div><div>👆---</div> </div></div>
+            <div class="guideBox_right"> <div class="rig"> <div>알 때</div><div>---👆</div> </div></div>
+            <div class="card-container"></div>
+        </div>
+        <div class="dic_box">
+            <div class="dic">📖</div>
+<!--            <div class="speak">🔊</div>-->
+            <div class="speak"><div class="play_icon">►</div></div>
+
+        </div>
+<!--        <div class="progressbg"><div class="progressbar"></div></div>-->
+        <div class="navi-container">
+            <div class="nav">
+                <span class="currentP">1</span><span>/</span><span class="totalP">10</span></div>
+            </div>
+    </div>
+<!--    <div class="button-container">-->
+<!--        <a href="#" class="speak_button speak1">🔊  단어</a>-->
+<!--        <a href="#" class="speak_button speak2">🔊  단어&뜻</a>-->
+<!--        <a href="#" class="speak_button speak3">🔊  자동재생</a>-->
+<!--    </div>-->
     <div class="button-container">
         <a href="#" class="button button0">미학습단어</a>
         <a href="#" class="button button1">모르는단어</a>
@@ -319,7 +429,7 @@
     <div id="popup" class="popup">
         <div class="popup-content">
             <span class="close">&times;</span>
-            <div class="meaningBox" id="meaningBox">이것은 커스텀 팝업입니다.</div>
+            <div class="meaningBox" id="meaningBox"></div>
         </div>
     </div>
 </body>
