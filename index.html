@@ -44,7 +44,7 @@
         }
         .contents-body {
             width: 100%;
-            max-height: 92vh; /* 화면의 80%까지 확장, 초과 시 스크롤 */
+            max-height: 82vh; /* 화면의 80%까지 확장, 초과 시 스크롤 */
             overflow: auto; /* 넘칠 경우 스크롤 */
             /*background-color: #edf1a8;*/
             margin-top: 10vh; /* `.contents-header` 높이만큼 아래로 배치 */
@@ -57,7 +57,7 @@
         .word-body{
             position: relative;
             width: 96%;
-            height: 50vh;
+            /*height: 50vh;*/
             border: 2px solid #22222220;
             border-radius: 3vh;
             margin-left: auto;
@@ -341,7 +341,7 @@
         @media (min-width: 768px) {
             .card {
                 width: calc(100% *0.8);
-                height: calc(100% / 3);
+                height: calc(100% *0.8);
                 font-size: 50px;
             }
             /*.button {*/
@@ -351,12 +351,27 @@
             /*    width: calc(100% / 3); !* 2개의 버튼으로 나누기 *!*/
             /*}*/
         }
-
+        @media (max-width: 400px) {
+            .card .front{
+                font-size: 18px;
+            }
+            .card .back{
+                font-size: 18px;
+            }
+            .button {
+                /*width: calc(100% /3); !* 1개의 버튼으로 나누기 *!*/
+                padding: 10px 5px;
+                font-size: 10px;
+                white-space: nowrap;
+                /*text-overflow: ellipsis;*/
+                overflow: hidden;
+            }
+        }
         @media (max-width: 240px) {
             .card {
                 position: absolute;
-                width: calc(100% *0.8);
-                height: calc(100% / 3);
+                width: calc(100% * 0.8);
+                height: calc(100% * 0.8);
                 font-size: 10px;
             }
             .button {
