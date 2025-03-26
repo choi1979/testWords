@@ -15,6 +15,13 @@ var middleVoca = (function(){
 
     var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것    
 
+    function setDynamicHeight() {
+        let vh = window.innerHeight * 0.8; // 화면 높이의 80%
+        document.querySelector(".wordBody").style.maxHeight = (vh - 50) + "px"; // titl 높이 제외
+    }
+
+    window.addEventListener("resize", setDynamicHeight);
+    window.addEventListener("load", setDynamicHeight);
     $(document).ready(function() {
         getStudyInfo();
 
