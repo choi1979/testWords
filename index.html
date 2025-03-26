@@ -10,13 +10,56 @@
         #body {
             margin: 0px;
         }
-        .contents-body{
-            position: relative;
+        .contents-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            font-weight: bold;
+            height: 9vh; /* 높이 고정 */
             width: 100%;
+            background-color: #77a7f5;
+            color: white;
+            position: fixed; /* 상단 고정 */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* 다른 요소 위에 배치 */
+        }
+        .contents-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 25px;
+            font-weight: bold;
+            height: 9vh; /* 높이 고정 */
+            width: 100%;
+            background-color: #77a7f5;
+            color: white;
+            position: fixed; /* 상단 고정 */
+            bottom: 0;
+            left: 0;
+            z-index: 1000; /* 다른 요소 위에 배치 */
+        }
+        .contents-body {
+            width: 100%;
+            max-height: 92vh; /* 화면의 80%까지 확장, 초과 시 스크롤 */
+            overflow: auto; /* 넘칠 경우 스크롤 */
+            /*background-color: #edf1a8;*/
+            margin-top: 10vh; /* `.contents-header` 높이만큼 아래로 배치 */
+            padding: 10px;
+            box-sizing: border-box;
+            /* 스크롤바 숨기기 */
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE, Edge */
+        }
+        .word-body{
+            position: relative;
+            width: 96%;
             height: 50vh;
             border: 2px solid #22222220;
             border-radius: 3vh;
-
+            margin-left: auto;
+            margin-right: auto;
         }
         .wordBox{
             position: relative;
@@ -132,13 +175,15 @@
             flex-wrap: wrap;
             margin-top: 10px;
             margin-bottom: 10px;
+            margin-left: auto;
+            margin-right: auto;
             /*border: 1px solid goldenrod;*/
             border: 2px solid #22222220;
             /*border: 1mm ridge rgba(211, 220, 50, .6);*/
             border-radius: 5px;
             padding: 4px 0  4px 0 ;
             position: relative;
-            width: 100%;
+            width: 96%;
         }
 
         .button {
@@ -149,7 +194,7 @@
             text-decoration: none;
             font-size: 16px;
             margin: 4px;
-            border-radius: 50%;
+            border-radius: 20px;
             cursor: pointer;
             width: calc(100% / 3 ); /* 3개의 버튼으로 나누기 */
         }
@@ -195,19 +240,7 @@
         .speak3 {
             background-color: #77a7f5; /* 두 번째 버튼 색상 */
         }
-        .titl {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 25px;
-            font-weight: bold;
-            height: 25px;
-            width: 100%;
-            margin: -8px 0 16px -8px;
-            padding: 14px 16px 14px 0;
-            background-color: #77a7f5;
-            color: white;
-        }
+
         .wordType{
             font-size: x-large;
             font-weight: bold;
@@ -232,6 +265,8 @@
             /*padding: 10px;*/
             cursor: pointer;
             color: red;
+            /*padding: 5px;*/
+            /*text-align: center;*/
             /*border-radius: 50px;*/
             /*background-color: #f7b5b0fa;*/
         }
@@ -240,6 +275,8 @@
             /*padding: 10px;*/
             cursor: pointer;
             color: blue;
+            /*padding: 5px;*/
+            /*text-align: center;*/
             /*border-radius: 50px;*/
             /*background-color: #2398F890;*/
         }
@@ -336,7 +373,7 @@
             .button-container{
                 margin: 5px;
             }
-            .titl {
+            .contents-header {
                 margin : 5px;
             }
         }
@@ -391,46 +428,49 @@
     </style>
 </head>
 <body>
-    <div class="titl">
+    <div class="contents-header">
         단어 암기
     </div>
-    <div class="button-container">
-        <div class="wordType">미학습 단어</div>
-    </div>
     <div class="contents-body">
-        <div class="wordBox">
-            <div class="guideBox_left"> <div class="lef"> <div>모를때</div><div>👆---</div> </div></div>
-            <div class="guideBox_right"> <div class="rig"> <div>알 때</div><div>---👆</div> </div></div>
-            <div class="card-container"></div>
+        <div class="button-container">
+            <div class="wordType">미학습 단어</div>
         </div>
-        <div class="dic_box">
-            <div class="dic">📖</div>
-<!--            <div class="speak">🔊</div>-->
-            <div class="speak"><div class="play_icon">►</div></div>
-
-        </div>
-<!--        <div class="progressbg"><div class="progressbar"></div></div>-->
-        <div class="navi-container">
-            <div class="nav">
-                <span class="currentP">1</span><span>/</span><span class="totalP">10</span></div>
+        <div class="word-body">
+            <div class="wordBox">
+                <div class="guideBox_left"> <div class="lef"> <div>모를때</div><div>👆---</div> </div></div>
+                <div class="guideBox_right"> <div class="rig"> <div>알 때</div><div>---👆</div> </div></div>
+                <div class="card-container"></div>
             </div>
-    </div>
-<!--    <div class="button-container">-->
-<!--        <a href="#" class="speak_button speak1">🔊  단어</a>-->
-<!--        <a href="#" class="speak_button speak2">🔊  단어&뜻</a>-->
-<!--        <a href="#" class="speak_button speak3">🔊  자동재생</a>-->
-<!--    </div>-->
-    <div class="button-container">
-        <a href="#" class="button button0">미학습단어</a>
-        <a href="#" class="button button1">모르는단어</a>
-        <a href="#" class="button button2">기억한단어</a>
-        <a href="#" class="button resetbutton">단어초기화</a>
-    </div>
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close">&times;</span>
-            <div class="meaningBox" id="meaningBox"></div>
+            <div class="dic_box">
+                <div class="dic">📖</div>
+    <!--            <div class="speak">🔊</div>-->
+                <div class="speak"><div class="play_icon">►</div></div>
+
+            </div>
+    <!--        <div class="progressbg"><div class="progressbar"></div></div>-->
+            <div class="navi-container">
+                <div class="nav">
+                    <span class="currentP">1</span><span>/</span><span class="totalP">10</span></div>
+                </div>
+        </div>
+    <!--    <div class="button-container">-->
+    <!--        <a href="#" class="speak_button speak1">🔊  단어</a>-->
+    <!--        <a href="#" class="speak_button speak2">🔊  단어&뜻</a>-->
+    <!--        <a href="#" class="speak_button speak3">🔊  자동재생</a>-->
+    <!--    </div>-->
+        <div class="button-container">
+            <a href="#" class="button button0">미학습단어</a>
+            <a href="#" class="button button1">모르는단어</a>
+            <a href="#" class="button button2">기억한단어</a>
+            <a href="#" class="button resetbutton">단어초기화</a>
+        </div>
+        <div id="popup" class="popup">
+            <div class="popup-content">
+                <span class="close">&times;</span>
+                <div class="meaningBox" id="meaningBox"></div>
+            </div>
         </div>
     </div>
+    <div class="contents-footer"></div>
 </body>
 </html>

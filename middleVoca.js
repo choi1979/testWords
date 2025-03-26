@@ -46,6 +46,12 @@ var middleVoca = (function(){
             openPopup();
             searchWord(wordStr);
         });
+        $('.guideBox_left').on('click', function(event){
+            left_sliding($('#card-0'));
+        });
+        $('.guideBox_right').on('click', function(event){
+            right_sliding($('#card-0'));
+        });
         $('.speak').on('click', function(event){
             speakWord();
         });
