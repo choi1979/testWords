@@ -404,12 +404,19 @@
             background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
             z-index: 99;
         }
+        .popup-body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            margin-top: 9vh;
+        }
         .popup-content {
             background: white;
             width: 80%;
-            height: 65vh;
+            height: 64vh;
             padding: 20px;
-            margin: 16% auto;
+            margin: 17% auto;
             border-radius: 10px;
             text-align: left;
             position: relative;
@@ -482,9 +489,11 @@
             <a href="#" class="button resetbutton">단어초기화</a>
         </div>
         <div id="popup" class="popup">
-            <div class="popup-content">
-                <span class="close">&times;</span>
-                <div class="meaningBox" id="meaningBox"></div>
+            <div class="popup-body">
+                <div class="popup-content">
+                    <span class="close">&times;</span>
+                    <div class="meaningBox" id="meaningBox"></div>
+                </div>
             </div>
         </div>
     </div>
