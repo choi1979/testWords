@@ -13,7 +13,8 @@ var middleVoca = (function(){
     var autoWords = [];     // 자동으로 실행할 단어
     var autoVocaNum = 0;
 
-    var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것    
+    var mode = 0;  // 0:전체, 1:모르는것, 2 : 아는것
+    var canSpeak = false;
 
     function setDynamicHeight() {
         let vh = window.innerHeight * 0.82; // 화면 높이의 80%
@@ -22,6 +23,7 @@ var middleVoca = (function(){
 
     window.addEventListener("resize", setDynamicHeight);
     window.addEventListener("load", setDynamicHeight);
+
     $(document).ready(function() {
         getStudyInfo();
 
@@ -188,6 +190,14 @@ var middleVoca = (function(){
             // }
         });
     });
+    // 음성이 로드되었을 때 실행
+    speechSynthesis.onvoiceschanged = () => {
+        console.log("음성 목록 업데이트됨");
+        if(!canSpeak) {
+            canSpeak = true;
+            speakWord();
+        }
+    };
     function getMode(){
         let str;
         switch (mode) {
@@ -460,7 +470,24 @@ var middleVoca = (function(){
         // console.log(vocaNum+'  ,  '+ word[wordNumArr[vocaNum]]);
         const utterance = new SpeechSynthesisUtterance(word[wordNumArr[vocaNum]]);
         utterance.lang = 'en-US'; // 언어 설정 (영어)
+        // 사용 가능한 음성 목록 가져오기
+        const voices = speechSynthesis.getVoices();
+
+        // 원하는 목소리 선택 (예: 여성 음성 'Samantha')
+        const selectedVoice = voices.find(voice => voice.name === 'Samantha');
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
         speechSynthesis.speak(utterance);        
+    }
+    function initSpeech() {
+        if(!canSpeak) {
+            speechSynthesis.getVoices(); // 음성 목록 불러오기 (iOS에서는 필요)
+        }else{
+            speakWord();
+        }
+
     }
     // function autoSpeakWord () {
     //     console.log('autoSpeakWord');
